@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *start=NULL;
+static int n;
+
+int traverse()
+{
+    struct node *q;
+    int c=0;
+    q=start;
+    while(q!=NULL)
+    {
+        if(q->data==0)
+            c++;
+        q=q->next;
+    }
+    int p=n*n-c;
+    if(c>p)
+       return 1;
+    else
+        return 0;
+}
+
+void display()
+{
+    int c=0;
+    struct node *q;
+    q=start;
+    puts("\nThe data of the matrix are : \n");
+    while(q!=NULL)
+    {
+        c++;
+        printf("%d\t",q->data);
+        if(c==n)
+        {
+            printf("\n");
+            c=0;
+        }
+        q=q->next;
+    }
+}
+
+void reverse()
+{
+    struct node *before,*present,*after;
+    before=start;
+    present=before->next;
+    after=present->next;
+    before->next=NULL;
+    present->next=before;
+    while(after!=NULL)
+    {
+        before=present;
+        present=after;
+        after=after->next;
+        present->next=before;
+    }
+    start=present;
+}
+
+void getData()
+{
+    register int i;
+    do
+    {
+        printf("Enter the no. of rows ");
+        scanf("%d",&n);
+        if(n>0)
+            break;
+        else
+            puts("Please enter a positive no. ");
+    }
+    while(1);
+    for(i=1;i<=n*n;i++)
+        getElements();
+}
+
+void getElements()
+{
+    struct node *temp;
+    temp=(struct node*)malloc(sizeof(struct node ));
+    printf("\nEnter data : ");
+    scanf("%d",&temp->data);
+    if(start==NULL)
+        temp->next=NULL;
+    else
+        temp->next=start;
+    start=temp;
+}
+
+int main()
+{
+    getData();
+    reverse();
+    display();
+    int f;
+    f=traverse();
+    (f==1)?printf("\nThe given matrix is sparse "):printf("\nThe given matrix is not sparse");
+    return 0;
+}
